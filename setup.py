@@ -14,6 +14,7 @@ with open('CHANGES.rst') as history_file:
 requirements = [
     'pytest-play>=1.0.0',
     'SQLAlchemy',
+    'play_python',
 ]
 
 setup_requirements = [
@@ -23,6 +24,7 @@ setup_requirements = [
 test_requirements = [
     'pytest',
     'pytest-cov',
+    'mock',
     # TODO: put package test requirements here
 ]
 

@@ -41,9 +41,12 @@ This project defines a new pytest-play_ command:
      'variable_expression': 'results[0][0]',
      'assertion': 'invoice_id == $invoice_id'}
 
-where ``database_url`` follows the format described here:
+where:
 
-* http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls
+* ``database_url`` follows the format described 
+  http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls
+
+* ``autocommit``, by default it is false. If true executes and commits too.
 
 Twitter
 =======
