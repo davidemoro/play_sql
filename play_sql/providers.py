@@ -62,15 +62,14 @@ class SQLProvider(BaseProvider):
         """
         expression = command.get('variable_expression', None)
         if expression:
-            self.engine.variables[
-                command['variable']] = self \
-                    .engine.execute_command(
-                        {'provider': 'python',
-                         'type': 'exec',
-                         'expression': expression
-                         },
-                        **kwargs,
-                    )
+            self.engine.execute_command(
+                {'provider': 'python',
+                 'type': 'store_variable',
+                 'name': command['variable'],
+                 'expression': expression
+                 },
+                **kwargs,
+            )
 
     def _condition(self, command):
         """ Execute a command condition
