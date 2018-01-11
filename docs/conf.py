@@ -54,7 +54,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'play sql'
+project = u'play_sql'
 copyright = u"2018, Davide Moro"
 
 # The version info for the project you're documenting, acts as replacement
