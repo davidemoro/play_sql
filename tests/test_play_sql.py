@@ -211,3 +211,116 @@ def test_multiple_databases(play_json):
          'variable_expression': 'results.fetchall()',
          'assertion': 'len(variables["all_contacts"]) == 1',
          'query': query2})
+
+
+def test_insert(play_json, tmpdir):
+    query2 = 'select * from contacts;'
+    import os
+    copy_database = tmpdir.join("copy_database.db")
+    db_path2 = os.path.join(
+        os.path.abspath(os.path.dirname(__file__)),
+        'database2.db')
+    with open(db_path2, 'rb') as db_path2_file:
+        copy_database.write_binary(db_path2_file.read())
+    database_url2 = 'sqlite:///{0}'.format(copy_database.strpath)
+    from play_sql import providers
+    sql_provider = providers.SQLProvider(play_json)
+    assert sql_provider.engine is play_json
+    sql_provider.command_sql(
+        {'provider': 'play_sql',
+         'type': 'sql',
+         'database_url': database_url2,
+         'variable': 'all_contacts',
+         'variable_expression': 'results.fetchall()',
+         'assertion': 'len(variables["all_contacts"]) == 1',
+         'query': query2})
+    sql_provider.command_sql(
+        {'provider': 'play_sql',
+         'type': 'sql',
+         'database_url': database_url2,
+         'query': 'INSERT INTO contacts VALUES '
+                  '(2, "John", "Doe", "email@email.com", "+01");'})
+    sql_provider.command_sql(
+        {'provider': 'play_sql',
+         'type': 'sql',
+         'database_url': database_url2,
+         'variable': 'all_contacts',
+         'variable_expression': 'results.fetchall()',
+         'assertion': 'len(variables["all_contacts"]) == 2',
+         'query': query2})
+
+
+def test_insert2(play_json, tmpdir):
+    query2 = 'select * from contacts;'
+    import os
+    copy_database = tmpdir.join("copy_database.db")
+    db_path2 = os.path.join(
+        os.path.abspath(os.path.dirname(__file__)),
+        'database2.db')
+    with open(db_path2, 'rb') as db_path2_file:
+        copy_database.write_binary(db_path2_file.read())
+    database_url2 = 'sqlite:///{0}'.format(copy_database.strpath)
+    from play_sql import providers
+    sql_provider = providers.SQLProvider(play_json)
+    assert sql_provider.engine is play_json
+    sql_provider.command_sql(
+        {'provider': 'play_sql',
+         'type': 'sql',
+         'database_url': database_url2,
+         'variable': 'all_contacts',
+         'variable_expression': 'results.fetchall()',
+         'assertion': 'len(variables["all_contacts"]) == 1',
+         'query': query2})
+    sql_provider.command_sql(
+        {'provider': 'play_sql',
+         'type': 'sql',
+         'database_url': database_url2,
+         'query': 'INSERT INTO contacts VALUES '
+                  '(2, "John", "Doe", "email@email.com", "+01")'})
+    sql_provider.command_sql(
+        {'provider': 'play_sql',
+         'type': 'sql',
+         'database_url': database_url2,
+         'variable': 'all_contacts',
+         'variable_expression': 'results.fetchall()',
+         'assertion': 'len(variables["all_contacts"]) == 2',
+         'query': query2})
+
+
+def test_insert_drop(play_json, tmpdir):
+    query2 = 'select * from contacts;'
+    import os
+    copy_database = tmpdir.join("copy_database.db")
+    db_path2 = os.path.join(
+        os.path.abspath(os.path.dirname(__file__)),
+        'database2.db')
+    with open(db_path2, 'rb') as db_path2_file:
+        copy_database.write_binary(db_path2_file.read())
+    database_url2 = 'sqlite:///{0}'.format(copy_database.strpath)
+    from play_sql import providers
+    sql_provider = providers.SQLProvider(play_json)
+    assert sql_provider.engine is play_json
+    sql_provider.command_sql(
+        {'provider': 'play_sql',
+         'type': 'sql',
+         'database_url': database_url2,
+         'variable': 'all_contacts',
+         'variable_expression': 'results.fetchall()',
+         'assertion': 'len(variables["all_contacts"]) == 1',
+         'query': query2})
+    with pytest.raises(Exception):
+        sql_provider.command_sql(
+            {'provider': 'play_sql',
+             'type': 'sql',
+             'database_url': database_url2,
+             'query': 'INSERT INTO contacts VALUES '
+                      '(2, "John", "Doe", "email@email.com", "+01"); '
+                      'DROP TABLE contacts;'})
+    sql_provider.command_sql(
+        {'provider': 'play_sql',
+         'type': 'sql',
+         'database_url': database_url2,
+         'variable': 'all_contacts',
+         'variable_expression': 'results.fetchall()',
+         'assertion': 'len(variables["all_contacts"]) == 1',
+         'query': query2})
