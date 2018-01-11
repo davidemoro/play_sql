@@ -28,18 +28,19 @@ class SQLProvider(BaseProvider):
 
     def command_sql(self, command, **kwargs):
         database_url = command['database_url']
-        db = self.get_db(database_url)
-        with db.begin() as connection:
-            rows = connection.execute(text(command['query']))
-            try:
-                self._make_variable(command, results=rows)
-                self._make_assertion(command, results=rows)
-            except Exception as e:
-                self.logger.exception(
-                    'Exception for command %r',
-                    command,
-                    e)
-                raise e
+        if self._condition(command):
+            db = self.get_db(database_url)
+            with db.begin() as connection:
+                rows = connection.execute(text(command['query']))
+                try:
+                    self._make_variable(command, results=rows)
+                    self._make_assertion(command, results=rows)
+                except Exception as e:
+                    self.logger.exception(
+                        'Exception for command %r',
+                        command,
+                        e)
+                    raise e
 
     def _make_assertion(self, command, **kwargs):
         """ Make an assertion based on python
