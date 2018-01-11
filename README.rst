@@ -13,9 +13,8 @@ play sql
         :target: https://play-sql.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
-.. image:: https://pyup.io/repos/github/tierratelematics/play_sql/shield.svg
-     :target: https://pyup.io/repos/github/tierratelematics/play_sql/
-     :alt: Updates
+.. image:: https://codecov.io/gh/tierratelematics/play_sql/branch/develop/graph/badge.svg
+        :target: https://codecov.io/gh/tierratelematics/play_sql
 
 
 pytest-play support for SQL expressions and assertions
