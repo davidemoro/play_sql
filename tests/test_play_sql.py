@@ -11,13 +11,11 @@ def variables():
     return {'skins': {'skin1': {'base_url': 'http://', 'credentials': {}}}}
 
 
-@pytest.mark.parametrize("query, expected_len", [
-    ('SELECT id FROM invoices', 4,),
-    ('SELECT id as invoice_id FROM invoices', 4,),
-    ('SELECT id FROM invoices where id>10', 0,),
-    ('SELECT id FROM invoices where id<3', 2,),
+@pytest.mark.parametrize("query", [
+    'SELECT id FROM invoices WHERE id=1',
+    'SELECT id FROM invoices WHERE id<2',
 ])
-def test_query(query, expected_len, play_json):
+def test_query(query, play_json):
     import os
     db_path = os.path.join(
         os.path.abspath(os.path.dirname(__file__)),
@@ -26,16 +24,36 @@ def test_query(query, expected_len, play_json):
     from play_sql import providers
     print_provider = providers.SQLProvider(play_json)
     assert print_provider.engine is play_json
-    sql = print_provider.command_sql(
+    print_provider.command_sql(
         {'provider': 'play_sql',
          'type': 'sql',
          'database_url': database_url,
+         'variable': 'invoice_id',
+         'variable_expression': 'results.fetchone()',
          'query': query})
-    results = [result for result in sql]
-    assert len(results) == expected_len
+    play_json.variables['invoice_id'][0] == 1
 
-    if expected_len != 0:
-        assert results[0][0] == 1
+
+@pytest.mark.parametrize("query", [
+    'SELECT id FROM invoices WHERE id>10',
+])
+def test_query_no_results(query, play_json):
+    import os
+    db_path = os.path.join(
+        os.path.abspath(os.path.dirname(__file__)),
+        'database.db')
+    database_url = 'sqlite:///{0}'.format(db_path)
+    from play_sql import providers
+    print_provider = providers.SQLProvider(play_json)
+    assert print_provider.engine is play_json
+    print_provider.command_sql(
+        {'provider': 'play_sql',
+         'type': 'sql',
+         'database_url': database_url,
+         'variable': 'invoice_id',
+         'variable_expression': 'results.fetchone()',
+         'query': query})
+    play_json.variables['invoice_id'] is None
 
 
 def test_multiple_commands(play_json):

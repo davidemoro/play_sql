@@ -38,15 +38,13 @@ This project defines a new pytest-play_ command:
      'database_url': 'postgresql://$db_user:$db_pwd@$db_host/$db_name',
      'query': 'SELECT *',
      'variable': 'invoice_id',
-     'variable_expression': 'results[0][0]',
+     'variable_expression': 'results.fetchone()[0]',
      'assertion': 'invoice_id == $invoice_id'}
 
 where:
 
 * ``database_url`` follows the format described 
   http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls
-
-* ``autocommit``, by default it is false. If true executes and commits too.
 
 Twitter
 =======
