@@ -22,9 +22,9 @@ def test_query(query, play_json):
         'database.db')
     database_url = 'sqlite:///{0}'.format(db_path)
     from play_sql import providers
-    print_provider = providers.SQLProvider(play_json)
-    assert print_provider.engine is play_json
-    print_provider.command_sql(
+    sql_provider = providers.SQLProvider(play_json)
+    assert sql_provider.engine is play_json
+    sql_provider.command_sql(
         {'provider': 'play_sql',
          'type': 'sql',
          'database_url': database_url,
@@ -45,9 +45,9 @@ def test_query_no_results(query, variable_expression, play_json):
         'database.db')
     database_url = 'sqlite:///{0}'.format(db_path)
     from play_sql import providers
-    print_provider = providers.SQLProvider(play_json)
-    assert print_provider.engine is play_json
-    print_provider.command_sql(
+    sql_provider = providers.SQLProvider(play_json)
+    assert sql_provider.engine is play_json
+    sql_provider.command_sql(
         {'provider': 'play_sql',
          'type': 'sql',
          'database_url': database_url,
@@ -67,10 +67,10 @@ def test_query_no_results_assertion(query, variable_expression, play_json):
         'database.db')
     database_url = 'sqlite:///{0}'.format(db_path)
     from play_sql import providers
-    print_provider = providers.SQLProvider(play_json)
-    assert print_provider.engine is play_json
+    sql_provider = providers.SQLProvider(play_json)
+    assert sql_provider.engine is play_json
     with pytest.raises(AssertionError):
-        print_provider.command_sql(
+        sql_provider.command_sql(
             {'provider': 'play_sql',
              'type': 'sql',
              'database_url': database_url,
@@ -90,23 +90,24 @@ def test_multiple_commands(play_json):
         'database.db')
     database_url = 'sqlite:///{0}'.format(db_path)
     from play_sql import providers
-    print_provider = providers.SQLProvider(play_json)
-    assert print_provider.engine is play_json
-    sql = print_provider.command_sql(
+    sql_provider = providers.SQLProvider(play_json)
+    assert sql_provider.engine is play_json
+    import pdb; pdb.set_trace()
+    sql_provider.command_sql(
         {'provider': 'play_sql',
          'type': 'sql',
          'database_url': database_url,
+         'variable': 'all_invoices',
+         'variable_expression': 'results.fetchall()',
+         'assertion': 'len(variables["all_invoices"]) == 4 and '
+                      'variables["all_invoices"][0][1] == "invoice 1"',
          'query': query1})
-    results = [result for result in sql]
-    assert len(results) == 4
-    assert results[0][0] == 1
-    assert results[0][1] == 'invoice 1'
 
-    sql = print_provider.command_sql(
+    sql_provider.command_sql(
         {'provider': 'play_sql',
          'type': 'sql',
          'database_url': database_url,
+         'variable': 'invoice_id',
+         'variable_expression': 'results.fetchone()[0]',
+         'assertion': '$invoice_id == variables["all_invoices"][0][0]',
          'query': query2})
-    results = [result for result in sql]
-    assert len(results) == 1
-    assert results[0][0] == 1
