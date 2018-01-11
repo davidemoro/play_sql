@@ -1,29 +1,21 @@
-# Config file for automatic testing at travis-ci.org
-
 language: python
 python:
-  - 3.6
-
+- 3.6
 before_install:
-  - sudo apt-get -qq update
-  - sudo apt-get install -y sqlite3
+- sudo apt-get -qq update
+- sudo apt-get install -y sqlite3
 install:
-  - pip install codecov
-  - pip install -U tox-travis
-
-# command to run tests, e.g. python setup.py test
+- pip install codecov
+- pip install -U tox-travis
 script: tox
 after_success:
 - codecov
-
-# After you create the Github repo and add it to Travis, run the
-# travis_pypi_setup.py script to finish PyPI deployment setup
 deploy:
   provider: pypi
   distributions: sdist bdist_wheel
   user: davidemoro
   password:
-    secure: PLEASE_REPLACE_ME
+    secure: kGvNeFikbqULcprMmKqajG8GcGvhhzK772dIsq5EEEDzSq/IC6Jsd8LHlHD+kQ81lgCc7/yAsE4v7hLdZEZhkw/aOFEGwYO/8CPqgpxbf6w5XD/G1ocZU9xQ5dvKJmACAEsekoZRd+DkyiJmBioSbvh+3cOz4dTeF1dnwKoaWLh04YH0BxZp8heE9tNPEILnPM4T7ZgOqhPNea2ZlTBqjTI23aMJo9oqHLFJvqpwZTsKWViKlWYhYKQtMBNb+zLVf+uygNpa4TS8kZHSNpiOjzYljslKxOP5EEoh+pEfbUNgu5qrQAJKHX4jhi4gwmiM9WhieRQams79o6bIUK1wKLWhPmILY0TsSaZPYbm5eV4R4HoERI0i4Gf0JVpygpDm/BBCkKDPgiRnDzwJxEud8kYZRr57lIqM9VJ7zPObNXe7wa6k80/8x62/XEo6DmCQLzB6tdeFdKqizXuLwrmfzv1eySX39IxAUV5U9Dqad8CRF80mPSZZnia/6K/UtSvvX3JN4Hj1QyllHNC5sRY4lBtfsqlXaGRKDrWFVHFrWs1qdRJCVo/chjcO0GEvpQ3QBhHxN2EaFsPNm+zm/WfUL7jOOt93TfkMcY1UN9kML1NbjFo1nBWQpaA0i604fRH4+7qNSxGNisWeVmmA8efMf+hHb+VU6iLPytoiIE6A8Y4=
   on:
     tags: true
     repo: tierratelematics/play_sql
