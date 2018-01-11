@@ -176,3 +176,38 @@ def test_results_not_in_variables(play_json):
          'assertion': '$invoices_len == 4',
          'query': query1})
     'results' not in play_json.variables
+
+
+def test_multiple_databases(play_json):
+    query1 = 'select * from invoices;'
+    query2 = 'select * from contacts;'
+    import os
+    db_path = os.path.join(
+        os.path.abspath(os.path.dirname(__file__)),
+        'database.db')
+    db_path2 = os.path.join(
+        os.path.abspath(os.path.dirname(__file__)),
+        'database2.db')
+    database_url = 'sqlite:///{0}'.format(db_path)
+    database_url2 = 'sqlite:///{0}'.format(db_path2)
+    from play_sql import providers
+    sql_provider = providers.SQLProvider(play_json)
+    assert sql_provider.engine is play_json
+    sql_provider.command_sql(
+        {'provider': 'play_sql',
+         'type': 'sql',
+         'database_url': database_url,
+         'variable': 'all_invoices',
+         'variable_expression': 'results.fetchall()',
+         'assertion': 'len(variables["all_invoices"]) == 4 and '
+                      'variables["all_invoices"][0][1] == "invoice 1"',
+         'query': query1})
+
+    sql_provider.command_sql(
+        {'provider': 'play_sql',
+         'type': 'sql',
+         'database_url': database_url2,
+         'variable': 'all_contacts',
+         'variable_expression': 'results.fetchall()',
+         'assertion': 'len(variables["all_contacts"]) == 1',
+         'query': query2})
