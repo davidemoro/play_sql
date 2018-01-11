@@ -84,7 +84,8 @@ def test_query_no_results_assertion(query, variable_expression, play_json):
 @pytest.mark.parametrize("query, variable_expression", [
     ('SELECT id FROM invoices WHERE id>10', 'results.fetchone()',),
 ])
-def test_query_no_results_assertion_condition(query, variable_expression, play_json):
+def test_query_no_results_assertion_condition(query, variable_expression,
+                                              play_json):
     import os
     db_path = os.path.join(
         os.path.abspath(os.path.dirname(__file__)),
@@ -136,7 +137,7 @@ def test_multiple_commands(play_json):
          'query': query2})
 
 
-def test_multiple_commands_len(play_json):
+def test_commands_len(play_json):
     query1 = 'select * from invoices;'
     import os
     db_path = os.path.join(
@@ -154,3 +155,24 @@ def test_multiple_commands_len(play_json):
          'variable_expression': 'len(results.fetchall())',
          'assertion': '$invoices_len == 4',
          'query': query1})
+
+
+def test_results_not_in_variables(play_json):
+    query1 = 'select * from invoices;'
+    import os
+    db_path = os.path.join(
+        os.path.abspath(os.path.dirname(__file__)),
+        'database.db')
+    database_url = 'sqlite:///{0}'.format(db_path)
+    from play_sql import providers
+    sql_provider = providers.SQLProvider(play_json)
+    assert sql_provider.engine is play_json
+    sql_provider.command_sql(
+        {'provider': 'play_sql',
+         'type': 'sql',
+         'database_url': database_url,
+         'variable': 'invoices_len',
+         'variable_expression': 'len(results.fetchall())',
+         'assertion': '$invoices_len == 4',
+         'query': query1})
+    'results' not in play_json.variables
