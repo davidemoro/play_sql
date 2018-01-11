@@ -34,10 +34,11 @@ def test_query(query, play_json):
     play_json.variables['invoice_id'][0] == 1
 
 
-@pytest.mark.parametrize("query", [
-    'SELECT id FROM invoices WHERE id>10',
+@pytest.mark.parametrize("query, variable_expression", [
+    ('SELECT id FROM invoices WHERE id>10', 'results.fetchone()',),
+    ('SELECT id FROM invoices WHERE id>10', 'results.first()',),
 ])
-def test_query_no_results(query, play_json):
+def test_query_no_results(query, variable_expression, play_json):
     import os
     db_path = os.path.join(
         os.path.abspath(os.path.dirname(__file__)),
@@ -51,8 +52,32 @@ def test_query_no_results(query, play_json):
          'type': 'sql',
          'database_url': database_url,
          'variable': 'invoice_id',
-         'variable_expression': 'results.fetchone()',
+         'variable_expression': variable_expression,
          'query': query})
+    play_json.variables['invoice_id'] is None
+
+
+@pytest.mark.parametrize("query, variable_expression", [
+    ('SELECT id FROM invoices WHERE id>10', 'results.fetchone()',),
+])
+def test_query_no_results_assertion(query, variable_expression, play_json):
+    import os
+    db_path = os.path.join(
+        os.path.abspath(os.path.dirname(__file__)),
+        'database.db')
+    database_url = 'sqlite:///{0}'.format(db_path)
+    from play_sql import providers
+    print_provider = providers.SQLProvider(play_json)
+    assert print_provider.engine is play_json
+    with pytest.raises(AssertionError):
+        print_provider.command_sql(
+            {'provider': 'play_sql',
+             'type': 'sql',
+             'database_url': database_url,
+             'variable': 'invoice_id',
+             'variable_expression': variable_expression,
+             'assertion': 'variables["invoice_id"] is not None',
+             'query': query})
     play_json.variables['invoice_id'] is None
 
 
