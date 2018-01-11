@@ -13,9 +13,8 @@ play sql
         :target: https://play-sql.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
-.. image:: https://pyup.io/repos/github/tierratelematics/play_sql/shield.svg
-     :target: https://pyup.io/repos/github/tierratelematics/play_sql/
-     :alt: Updates
+.. image:: https://codecov.io/gh/tierratelematics/play_sql/branch/develop/graph/badge.svg
+        :target: https://codecov.io/gh/tierratelematics/play_sql
 
 
 pytest-play support for SQL expressions and assertions
@@ -27,7 +26,7 @@ More info and examples on:
 
 
 Features
---------
+========
 
 This project defines a new pytest-play_ command:
 
@@ -36,17 +35,27 @@ This project defines a new pytest-play_ command:
     {'type': 'sql',
      'provider': 'play_sql',
      'database_url': 'postgresql://$db_user:$db_pwd@$db_host/$db_name',
-     'query': 'SELECT *',
+     'query': 'SELECT id, title FROM invoices',
      'variable': 'invoice_id',
-     'variable_expression': 'results[0][0]',
+     'variable_expression': 'results.first()[0]',
+     'condition': '1 > 0',
      'assertion': 'invoice_id == $invoice_id'}
 
 where:
 
 * ``database_url`` follows the format described 
   http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls
+* ``variable_expression`` is a Python expression
+    * ``results.fetchone()`` returns an array whose elements matches with the next row's
+      columns and it could be invoked many times until there will be no more rows (eg: first call
+      ``(1, 'first',)``, second call ``(2, 'second')``)
+    * ``results.first()`` returns an array whose elements matches with the first row's colums and it
+      can be invoked exactly one time
+    * ``results.fetchall()`` returns an array of tuples whose elements matches with the selected
+      colums (eg: ``[(1, 'first'), (2, 'second'), (3, 'third')]``)
 
-* ``autocommit``, by default it is false. If true executes and commits too.
+Fetch first
+===========
 
 Twitter
 =======
