@@ -54,9 +54,6 @@ where:
     * ``results.fetchall()`` returns an array of tuples whose elements matches with the selected
       colums (eg: ``[(1, 'first'), (2, 'second'), (3, 'third')]``)
 
-Fetch first
-===========
-
 Twitter
 =======
 
