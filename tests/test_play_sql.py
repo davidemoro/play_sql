@@ -81,31 +81,6 @@ def test_query_no_results_assertion(query, variable_expression, play_json):
     play_json.variables['invoice_id'] is None
 
 
-@pytest.mark.parametrize("query, variable_expression", [
-    ('SELECT id FROM invoices WHERE id>10', 'results.fetchone()',),
-])
-def test_query_no_results_assertion_condition(query, variable_expression,
-                                              play_json):
-    import os
-    db_path = os.path.join(
-        os.path.abspath(os.path.dirname(__file__)),
-        'database.db')
-    database_url = 'sqlite:///{0}'.format(db_path)
-    from play_sql import providers
-    sql_provider = providers.SQLProvider(play_json)
-    assert sql_provider.engine is play_json
-    sql_provider.command_sql(
-        {'provider': 'play_sql',
-         'type': 'sql',
-         'database_url': database_url,
-         'variable': 'invoice_id',
-         'variable_expression': variable_expression,
-         'assertion': 'variables["invoice_id"] is not None',
-         'condition': '4 > 8',
-         'query': query})
-    'invoice_id' not in play_json.variables
-
-
 def test_multiple_commands(play_json):
     query1 = 'select * from invoices;'
     query2 = 'select id from invoices where id=1;'

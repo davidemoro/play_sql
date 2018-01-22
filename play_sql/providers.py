@@ -28,19 +28,18 @@ class SQLProvider(BaseProvider):
 
     def command_sql(self, command, **kwargs):
         database_url = command['database_url']
-        if self._condition(command):
-            db = self.get_db(database_url)
-            with db.begin() as connection:
-                rows = connection.execute(text(command['query']))
-                try:
-                    self._make_variable(command, results=rows)
-                    self._make_assertion(command, results=rows)
-                except Exception as e:
-                    self.logger.exception(
-                        'Exception for command %r',
-                        command,
-                        e)
-                    raise e
+        db = self.get_db(database_url)
+        with db.begin() as connection:
+            rows = connection.execute(text(command['query']))
+            try:
+                self._make_variable(command, results=rows)
+                self._make_assertion(command, results=rows)
+            except Exception as e:
+                self.logger.exception(
+                    'Exception for command %r',
+                    command,
+                    e)
+                raise e
 
     def _make_assertion(self, command, **kwargs):
         """ Make an assertion based on python
@@ -70,19 +69,3 @@ class SQLProvider(BaseProvider):
                  },
                 **kwargs,
             )
-
-    def _condition(self, command):
-        """ Execute a command condition
-        """
-        return_value = False
-        condition = command.get('condition', None)
-        if condition:
-            return_value = self.engine.execute_command(
-                {'provider': 'python',
-                 'type': 'exec',
-                 'expression': condition
-                 }
-            )
-        else:
-            return_value = True
-        return return_value

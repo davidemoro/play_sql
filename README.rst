@@ -26,7 +26,7 @@ More info and examples on:
 
 
 Features
-========
+--------
 
 This project defines a new pytest-play_ command:
 
@@ -38,7 +38,6 @@ This project defines a new pytest-play_ command:
      'query': 'SELECT id, title FROM invoices',
      'variable': 'invoice_id',
      'variable_expression': 'results.first()[0]',
-     'condition': '1 > 0',
      'assertion': 'invoice_id == $invoice_id'}
 
 where:
@@ -54,18 +53,15 @@ where:
     * ``results.fetchall()`` returns an array of tuples whose elements matches with the selected
       colums (eg: ``[(1, 'first'), (2, 'second'), (3, 'third')]``)
 
-Fetch first
-===========
-
 Twitter
-=======
+-------
 
 ``pytest-play`` tweets happens here:
 
 * `@davidemoro`_
 
 Credits
-=======
+-------
 
 This package was created with Cookiecutter_ and the cookiecutter-play-plugin_ (based on `audreyr/cookiecutter-pypackage`_ project template).
 
