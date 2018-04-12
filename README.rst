@@ -6,8 +6,8 @@ play sql
 .. image:: https://img.shields.io/pypi/v/play_sql.svg
         :target: https://pypi.python.org/pypi/play_sql
 
-.. image:: https://img.shields.io/travis/davidemoro/play_sql.svg
-        :target: https://travis-ci.org/davidemoro/play_sql
+.. image:: https://travis-ci.org/davidemoro/play_sql.svg?branch=develop
+       :target: https://travis-ci.org/davidemoro/play_sql
 
 .. image:: https://readthedocs.org/projects/play-sql/badge/?version=latest
         :target: https://play-sql.readthedocs.io/en/latest/?badge=latest
