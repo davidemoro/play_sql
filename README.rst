@@ -32,13 +32,13 @@ This project defines a new pytest-play_ command:
 
 ::
 
-    {'type': 'sql',
-     'provider': 'play_sql',
-     'database_url': 'postgresql://$db_user:$db_pwd@$db_host/$db_name',
-     'query': 'SELECT id, title FROM invoices',
-     'variable': 'invoice_id',
-     'variable_expression': 'results.first()[0]',
-     'assertion': 'invoice_id == $invoice_id'}
+    - type: sql
+      provider: play_sql
+      database_url: postgresql://$db_user:$db_pwd@$db_host/$db_name
+      query: SELECT id, title FROM invoices
+      variable: invoice_id
+      variable_expression: results.first()[0]
+      assertion: invoice_id == $invoice_id
 
 where:
 
