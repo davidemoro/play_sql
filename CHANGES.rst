@@ -5,7 +5,7 @@ CHANGES
 0.0.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Supports new pytest-play >= 2.0 YAML based syntax (json no more supported)
 
 
 0.0.2 (2018-01-22)
