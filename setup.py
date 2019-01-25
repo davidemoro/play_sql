@@ -29,7 +29,7 @@ test_requirements = [
 
 setup(
     name='play_sql',
-    version='0.0.3',
+    version='0.0.4.dev0',
     description="pytest-play support for SQL expressions and assertions",
     long_description=readme + '\n\n' + history,
     author="Davide Moro",
