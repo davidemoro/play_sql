@@ -12,7 +12,7 @@ with open('CHANGES.rst') as history_file:
     history = history_file.read()
 
 requirements = [
-    'pytest-play>=1.2.0',
+    'pytest-play>=2.0.0',
     'SQLAlchemy',
 ]
 
